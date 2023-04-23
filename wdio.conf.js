@@ -27,13 +27,8 @@ export const config = {
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
             args: [
-<<<<<<< HEAD
                 '--window-size=1920,1080',
                 //'--headless',
-=======
-                // '--window-size=1920,1080',
-                // '--headless',
->>>>>>> b3c5e93647c0257cb0c8c38fa927c706f9e00016
                 '--no-sandbox',
                 '--disable-gpu',
                 '--disable-setuid-sandbox',
