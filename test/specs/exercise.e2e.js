@@ -8,7 +8,13 @@ describe('Czechitas Login Page', async () => {
 
         await browser.reloadSession();
 
-        await browser.url('/kontakt');
+        await browser.url('/prihlaseni');
+
+        const emailField = await $('#email');
+        console.log(await emailField.getHTML());
+
+        const buttonTagSelector = $('button');
+        console.log(await buttonTagSelector.getHTML());
 
         const windowSize = await browser.getWindowSize();
         console.log(windowSize);
