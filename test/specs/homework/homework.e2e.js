@@ -19,20 +19,24 @@ describe('Czechitas Login Page', async () => {
     it('examples of selectors', async () => {
 
         await browser.reloadSession();
-        await browser.url('/prihlaseni');
+        await browser.url('/registrace');
 
-        /*
-        CSS Selectors: tag
-         */
-        const formTagSelector = $('form');
-        console.log(await formTagSelector.getHTML());
+        await browser.saveScreenshot("registracka.png")
 
-        const inputTagSelector = $('input');
-        console.log(await inputTagSelector.getHTML());
+        const idNameSelector = await $('#name');
+        console.log(await idNameSelector.getHTML());
 
-        const buttonTagSelector = $('button');
-        console.log(await buttonTagSelector.getHTML());
+        const idEmailSelector = await $('#email');
+        console.log(await idEmailSelector.getHTML());
 
-    });
+        const idPasswordSelector = $('#password');
+        console.log(await idPasswordSelector.getHTML());
 
+        const idPasswordConfirmSelector = $('#password-confirm');
+        console.log(await idPasswordConfirmSelector.getHTML());
+
+        const classSelector = $('.btn-primary');
+        console.log(await classSelector.getHTML());
+
+    })
 });

@@ -10,18 +10,16 @@ describe('Czechitas Login Page', async () => {
 
         await browser.url('/prihlaseni');
 
+        await browser.saveScreenshot("prihl2.png")
+
         const emailField = await $('#email');
         console.log(await emailField.getHTML());
 
-        const buttonTagSelector = $('button');
+        const buttonTagSelector = await $('button');
         console.log(await buttonTagSelector.getHTML());
 
         const windowSize = await browser.getWindowSize();
         console.log(windowSize);
-
-        await browser.saveScreenshot("kontakt_page.png")
-
-        await browser.pause(5000);
 
     });
 
