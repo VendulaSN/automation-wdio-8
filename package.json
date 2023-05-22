@@ -19,7 +19,7 @@
     "geckodriver": "^3.2.0",
     "msedgedriver": "^91.0.0",
     "wdio-chromedriver-service": "^8.1.1",
-    "wdio-edgedriver-service": "^2.1.2",
+    "wdio-edgedriver-service": "^3.0.1",
     "wdio-geckodriver-service": "^4.1.0",
     "wdio-html-nice-reporter": "^8.1.0",
     "wdio-safaridriver-service": "^2.1.0",

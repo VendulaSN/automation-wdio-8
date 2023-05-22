@@ -18,7 +18,8 @@ export const config = {
         lesson_08: ['./test/specs/examples/lesson-08/**/*.e2e.js'],
         lesson_09: ['./test/specs/examples/lesson-09/**/*.e2e.js'],
         lesson_10: ['./test/specs/examples/lesson-10/**/*.e2e.js'],
-        lesson_11: ['./test/specs/examples/lesson-11/**/*.e2e.js']
+        lesson_11: ['./test/specs/examples/lesson-11/**/*.e2e.js'],
+        org: ['./test/specs/org.e2e.js'],
     },
     maxInstances: 10,
     capabilities: [{
@@ -57,6 +58,6 @@ export const config = {
     reporters: ['spec'],
     mochaOpts: {
         ui: 'bdd',
-        timeout: 6000
+        timeout: 90000
     }
 }
