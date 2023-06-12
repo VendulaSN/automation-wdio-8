@@ -15,7 +15,8 @@ async function login(username, password) {
 }
 
 async function goToApplications() {
-    await $('=Přihlášky').click();
+    /*await $('=Přihlášky').click();*/
+    await browser.url('/admin/prihlasky');
 }
 
 async function waitForTableToLoad() {

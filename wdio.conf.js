@@ -1,3 +1,39 @@
+import allure from 'allure-commandline';
+import video from 'wdio-video-reporter';
+//import deepmerge from "deepmerge";
+//import {config as baseConfig} from '../../../../wdio.conf.js';
+
+const allureTmpDirectory = './.tmp/allure';
+const allureReportDirectory = './reports/allure';
+
+
+
+// wdio.conf.js
+
+export const configfirefox = {
+    // MANDATORY: Add geckodriver to service array.
+    // Default: empty array
+    services: [
+        [
+            'geckodriver',
+            // service options
+            {
+                // The path where the output of the Geckodriver server should
+                // be stored (uses the config.outputDir by default when not set).
+                outputDir: './logs',
+
+                // pass in custom options for Geckodriver, for more information see
+                // https://github.com/webdriverio-community/node-geckodriver#options
+                geckodriverOptions: {
+                    log: 'debug' // set log level of driver
+                }
+            }
+        ]
+    ],
+};
+
+
+
 export const config = {
     runner: 'local',
     specs: [
@@ -20,11 +56,13 @@ export const config = {
         lesson_10: ['./test/specs/examples/lesson-10/**/*.e2e.js'],
         lesson_11: ['./test/specs/examples/lesson-11/**/*.e2e.js'],
         org: ['./test/specs/org.e2e.js'],
+        fixtures: ['./test/specs/fixtures.js'],
     },
     maxInstances: 10,
     capabilities: [{
         maxInstances: 5,
         browserName: 'chrome',
+        /*automationProtocol: 'devtools',*/
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
             args: [
@@ -49,15 +87,52 @@ export const config = {
     baseUrl: 'https://team8-2022brno.herokuapp.com',
     waitforTimeout: 10000,
     connectionRetryTimeout: 120000,
+    automationProtocol: 'devtools',
     connectionRetryCount: 3,
     services: [
         'chromedriver',
         'geckodriver'
     ],
     framework: 'mocha',
-    reporters: ['spec'],
+    reporters: ['spec',
+    [video, {
+        outputDir: allureTmpDirectory,
+        saveAllVideos: true,        // If true, also saves videos for successful test cases
+        videoSlowdownMultiplier: 3, // Higher to get slower videos, lower for faster videos [Value 1-100]
+    }],
+
+    ['allure', {
+        outputDir: allureTmpDirectory,
+        disableWebdriverStepsReporting: true,
+        disableWebdriverScreenshotsReporting: true,
+        addConsoleLogs: true,
+    }]
+],
     mochaOpts: {
         ui: 'bdd',
         timeout: 90000
+    },
+
+        onPrepare: (config, capabilities) => {
+        // remove previous tmp files
+        fs.rmdir(allureTmpDirectory, { recursive: true }, err => {
+            if (err) console.log(err);
+        });
+    },
+    
+        onComplete: () => {
+        const reportError = new Error('Could not generate Allure report')
+        const generation = allure(['generate', '--clean', allureTmpDirectory, '--output', allureReportDirectory]);
+        return new Promise((resolve, reject) => {
+            const generationTimeout = setTimeout(() => reject(reportError), 5000);
+            generation.on('exit', function(exitCode) {
+                clearTimeout(generationTimeout);
+                if (exitCode !== 0) return reject(reportError);
+                console.log('Allure report successfully generated');
+                resolve()
+            });
+        });
     }
+
 }
+

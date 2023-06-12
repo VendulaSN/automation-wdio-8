@@ -1,5 +1,8 @@
+//Meeting ID: 810 9278 7649
 
-        /**
+//Passcode: 797195
+
+/**
  * Lesson 2: Selectors
  *
  * Example HTML (simplified)
@@ -15,15 +18,71 @@
  */
 
 
+async function openLoginPage() {
+    await browser.reloadSession();
+    await browser.url('/prihlaseni');
+}
+
+
+
+function getNameField() {
+    return $('#name');
+}
+  
+function getEmailField() {
+        return $('#email');
+    }
+ /*   
+function getPasswordField() {
+        return $('#password');
+    }
+   
+function getPasswordConfirmField() {
+        return $('#password-confirm');
+    }    
+
+function getLoginButton() {
+        return $('.btn-primary');
+    }
+    
+function getToast() {
+        return $('.toast-message');  
+        
+};  */     
+
 
 describe('Login Page', async () => {
-        
             
     beforeEach(async () => {
-        //await browser.reloadSession();
+        await browser.reloadSession();
         await browser.url('/registrace');
     });
-            
+    
+    it('should save screenshot', async () => {
+        
+        await browser.saveScreenshot("registracka.png")
+    });
+
+    it('examples of selectors', async () => {
+        
+        const idNameSelector = await $('#name');
+        console.log(await idNameSelector.getHTML());
+
+        const idEmailSelector = await $('#email');
+        console.log(await idEmailSelector.getHTML());
+
+        const idPasswordSelector = $('#password');
+        console.log(await idPasswordSelector.getHTML());
+
+        const idPasswordConfirmSelector = $('#password-confirm');
+        console.log(await idPasswordConfirmSelector.getHTML());
+
+        const classSelector = $('.btn-primary');
+        console.log(await classSelector.getHTML());
+
+    })
+
+    
         
     it('should show reg form', async () => {
 
@@ -31,7 +90,7 @@ describe('Login Page', async () => {
         await expect(idNameSelector).toBeDisplayed();
         await expect(idNameSelector).toBeEnabled();
 
-        const emailField = await $('#email'); // awaited once, used result on twice
+        const emailField = await getEmailField();
         await expect(emailField).toBeDisplayed();
         await expect(emailField).toBeEnabled();
               
@@ -45,69 +104,69 @@ describe('Login Page', async () => {
         
         const loginButton = $('.btn-primary'); // did not await element here
         await expect(await loginButton.getText()).toEqual('Zaregistrovat'); // awaited getText() which resolved the whole chain
-        });
-            
     });
-
-    await browser.pause(1000);
-    
-    it('reg with valid credentials', async () => {
-
-       
-        const idNameSelector = await $('#name');
+            
+   
+    it('should verify valid reg form2', async () => {
+        let nahodneCislo = Math.random()
+        
+        const NameSelector = await $('#name');
         const emailField = await $('#email');
         const passwordField = await $('#password');
         const passwordConfirmField = await $('#password-confirm');
-        const classSelector = await $('.btn-primary');
-        //const userNameDropdown = $('.navbar-right').$('[data-toggle="dropdown"]');
+        const loginButton = await $('.btn-primary');
+        const userNameDropdown = $('.navbar-right').$('[data-toggle="dropdown"]');
 
-        await idNameSelector.setValue(Vvv)
-        await emailField.setValue(gfh@gmail.cz);
+        /*await idNameSelector.setValue(Venny)
+        await emailField.setValue(gfh@seznam.cz);
         await passwordField.setValue(pass1);
         await passwordConfirmField.setValue(pass1);
-        await classSelector.click()
+        await loginButton.click()*/
+       
+        await NameSelector.setValue("Vendy77");
+        await emailField.setValue(nahodneCislo + '@seznam.cz');
+        await passwordField.setValue("Ahoj123");
+        await passwordConfirmField.setValue("Ahoj123")
+        await loginButton.click()
 
-        //await expect(await userNameDropdown.getText()).toEqual(userFullName);
+        await expect(await userNameDropdown.getText()).toEqual("Vendy77");
 
-});
-           
-    /*await idNameSelector.setValue("Vendy77");
-    await idEmailSelector.setValue("ahoj22222222@seznam.cz");
-    await idPasswordSelector.setValue("Ahoj123");
-    await idPasswordConfirmSelector.setValue("Ahoj123")
-    await classSelector.click()
-
-
+    });
 
         /*const navbarRight = $('.navbar-right')
         const userNameDropdown = await navbarRight.$('[data-toggle="dropdown"]');
         console.log('User currently logged in: ' + await userNameDropdown.getText());*/
 
+
+    it('invalid registration - numeric password', async () => {
+        let nahodneCislo = Math.random()
+
+        const NameSelector = await $('#name');
+        const emailField = await $('#email');
+        const passwordField = await $('#password');
+        const passwordConfirmField = await $('#password-confirm');
+        const loginButton = await $('.btn-primary');
+        const userNameDropdown = $('.navbar-right').$('[data-toggle="dropdown"]');
         
-        
+        await NameSelector.setValue("Ve1");
+        await emailField.setValue(nahodneCislo + '@seznam.cz');
+        await passwordField.setValue("1123");
+        await passwordConfirmField.setValue("1123")
 
-
-    
-
-/*nevalidní přihlašování - číselné heslo
-        await idNameSelector.setValue("Vendy");
-        await idEmailSelector.setValue("ahoj@seznam.cz");
-        await idPasswordSelector.setValue("1123");
-        await idPasswordConfirmSelector.setValue("1123")
-
-        await classSelector.click();
+        await loginButton.click();
         const fieldError = $('.invalid-feedback');
         console.log('Field error: ' + await fieldError.getText());
 
         const toastMessage = $('.toast-message');
         console.log('Error: ' + await toastMessage.getText());
 
-        /*
+        
         const fieldError1 = $('.invalid-feedback');
         console.log('Field error: ' + await fieldError1.getText());
-        const userNameDropdown = navbarRight.$('[data-toggle="dropdown"]'); */
+        //console.log('User currently logged in: ' + await userNameDropdown.getText()); //pokus jestli to selže
 
-
-               /*const navBarNavSelector = $('.active');
+        const navBarNavSelector = $('.active');
         console.log(await navBarNavSelector.getHTML);
-        console.log(await navBarNavSelector.getText);*/
+        console.log(await navBarNavSelector.getText);
+    });
+});

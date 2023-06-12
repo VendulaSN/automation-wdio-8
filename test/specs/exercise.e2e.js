@@ -4,6 +4,12 @@ import {username, password} from './fixtures.js'
 
 describe('Czechitas Login Page', async () => {
 
+
+async function getEmailField() {
+    return $('#email');
+     
+}
+     
     it('should open login page', async () => {
 
         await browser.reloadSession();
@@ -17,10 +23,12 @@ describe('Czechitas Login Page', async () => {
 
         //const buttonTagSelector = await $('button');
         //console.log(await buttonTagSelector.getHTML());
+        const emailField = await getEmailField();
+        await expect(emailField).toBeDisplayed();
+        await expect(emailField).toBeEnabled();
 
-       
-        const emailField = $('#email');
-        const EmailLabel = $('label[for="email"]')
+             
+        //const EmailLabel = $('label[for="email"]')
 
         console.log('Email field is displayed: ' + await emailField.isDisplayed());
         console.log('Email field is enabled:' + await emailField.isEnabled());
@@ -39,7 +47,7 @@ describe('Czechitas Login Page', async () => {
         await passwordField.setValue(password);
         await loginButton.click();
 
-        console.log("Email field label: " + await EmailLabel.getText());
+        //console.log("Email field label: " + await EmailLabel.getText());
 
         const toastMessage = $('.toast-message');
         console.log('Error: ' + await toastMessage.getText());

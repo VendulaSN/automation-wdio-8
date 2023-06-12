@@ -1,6 +1,8 @@
 /**
  * Lesson 4: Test structure
  */
+
+
 import {username, password} from '../../fixtures.js'
 
 describe('Login Page', async () => {
