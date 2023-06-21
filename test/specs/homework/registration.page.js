@@ -1,12 +1,20 @@
-class LoginPage {
+//import { password, username } from "../fixtures";
+
+//import { usernameTest } from "../fixtures";
+
+//import { email } from "../fixtures";
+
+class RegistrationPage {
 
     constructor() {
-        this.url = '/prihlaseni';
+        this.url = '/registrace';
     }
 
     //metody které vrací něco na stránce
+    get nameField() {return $('#name'); }
     get emailField() { return $('#email'); }
     get passwordField() { return $('#password'); }
+    get passwordConfirmField() { return $('#password-confirm'); }
     get loginButton() { return $('.btn-primary'); }
     get fieldError() { return $('.invalid-feedback'); }
     get toast() { return $('.toast-message'); }
@@ -19,9 +27,11 @@ class LoginPage {
         await browser.url(this.url);
     }
 
-    async login(username, password) {
-        await this.emailField.setValue(username);
+    async login(usernameTest, email, password) {
+        await this.nameField.setValue(usernameTest);
+        await this.emailField.setValue(email);
         await this.passwordField.setValue(password);
+        await this.passwordConfirmField.setValue(password);
         await this.loginButton.click();
     }
 
@@ -45,5 +55,5 @@ class LoginPage {
 }
 
 //export novou instanci třídy login page
-export default new LoginPage();
+export default new RegistrationPage();
 

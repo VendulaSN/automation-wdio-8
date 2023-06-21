@@ -30,7 +30,7 @@ class ApplicationsPage extends AppPage {
 }
 
 class TableRow {
-
+    //řekneme construktoru že to bude jen takkový webový element
     constructor(rowElement) {
         this.rowElement = rowElement;
     }

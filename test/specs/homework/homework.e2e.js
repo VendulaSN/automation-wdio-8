@@ -1,116 +1,82 @@
 //Meeting ID: 810 9278 7649
-
 //Passcode: 797195
 
-/**
- * Lesson 2: Selectors
- *
- * Example HTML (simplified)
- *
- * <div class="card-body">
- *     <form method="POST" action="https://...">
- *         <input id="email" type="email" name="email" value="">
- *         <input id="password" type="password" name="password">
- *         <button type="submit" class="btn btn-primary">Přihlásit</button>
- *         <a class="btn btn-link" href="https://...">Zapomněli jste své heslo?</a>
- *     </form>
- * </div>
- */
 
+import {usernameTest, email, password, userFullName, password_confirm, generovanyEmail, generovanyUzivatel} from '../../specs/fixtures.js'
+import RegistrationPage from '../../specs/homework/registration.page.js'
 
-async function openLoginPage() {
-    await browser.reloadSession();
-    await browser.url('/prihlaseni');
-}
+describe('Registration page', async () => {
 
-
-
-function getNameField() {
-    return $('#name');
-}
-  
-function getEmailField() {
-        return $('#email');
-    }
- /*   
-function getPasswordField() {
-        return $('#password');
-    }
-   
-function getPasswordConfirmField() {
-        return $('#password-confirm');
-    }    
-
-function getLoginButton() {
-        return $('.btn-primary');
-    }
-    
-function getToast() {
-        return $('.toast-message');  
-        
-};  */     
-
-
-describe('Login Page', async () => {
-            
     beforeEach(async () => {
-        await browser.reloadSession();
-        await browser.url('/registrace');
+        await RegistrationPage.open();
     });
-    
-    it('should save screenshot', async () => {
-        
-        await browser.saveScreenshot("registracka.png")
-    });
-
-    it('examples of selectors', async () => {
-        
-        const idNameSelector = await $('#name');
-        console.log(await idNameSelector.getHTML());
-
-        const idEmailSelector = await $('#email');
-        console.log(await idEmailSelector.getHTML());
-
-        const idPasswordSelector = $('#password');
-        console.log(await idPasswordSelector.getHTML());
-
-        const idPasswordConfirmSelector = $('#password-confirm');
-        console.log(await idPasswordConfirmSelector.getHTML());
-
-        const classSelector = $('.btn-primary');
-        console.log(await classSelector.getHTML());
-
-    })
 
     
-        
-    it('should show reg form', async () => {
+    it('should show registration form', async () => {
+    await expect(await RegistrationPage.nameField).toBeDisplayed();
+    await expect(await RegistrationPage.nameField).toBeEnabled();
+    await expect(await RegistrationPage.emailField).toBeDisplayed();
+    await expect(await RegistrationPage.emailField).toBeEnabled();
+    await expect(await RegistrationPage.passwordField).toBeDisplayed();
+    await expect(await RegistrationPage.passwordField).toBeEnabled();
+    await expect(await RegistrationPage.passwordConfirmField).toBeDisplayed();
+    await expect(await RegistrationPage.passwordConfirmField).toBeEnabled();
+    await expect(await RegistrationPage.loginButton.getText()).toEqual('Zaregistrovat');
 
-        const idNameSelector = await $('#name'); // awaited once, used result on twice
-        await expect(idNameSelector).toBeDisplayed();
-        await expect(idNameSelector).toBeEnabled();
-
-        const emailField = await getEmailField();
-        await expect(emailField).toBeDisplayed();
-        await expect(emailField).toBeEnabled();
-              
-        const passwordField = await $('#password'); // awaited once, used result on twice
-        await expect(passwordField).toBeDisplayed();
-        await expect(passwordField).toBeEnabled();
-
-        const passwordConfirmField = await $('#password-confirm'); // awaited once, used result on twice
-        await expect(passwordConfirmField).toBeDisplayed();
-        await expect(passwordConfirmField).toBeEnabled();
-        
-        const loginButton = $('.btn-primary'); // did not await element here
-        await expect(await loginButton.getText()).toEqual('Zaregistrovat'); // awaited getText() which resolved the whole chain
     });
-            
+
+
+    it('should not login with invalid credentials', async () => {
+
+        await RegistrationPage.login('invalid');
+
+        // na stránce je jednak toast message
+        await expect(await RegistrationPage.getToastMessage()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+
+        // ale také validační message ve formuláři
+        await expect(await RegistrationPage.getFieldError()).toEqual('Tyto přihlašovací údaje neodpovídají žadnému záznamu.')
+
+        // stále vidíme login formulář
+        await expect(await RegistrationPage.nameField).toBeDisplayed();
+        await expect(await RegistrationPage.emailField).toBeDisplayed();
+        await expect(await RegistrationPage.passwordField).toBeDisplayed();
+        await expect(await RegistrationPage.passwordConfirmField).toBeDisplayed();
+        await expect(await RegistrationPage.loginButton).toBeDisplayed();
+    });
+
+    
+    it('should register with valid credentials', async () => {
+
+    await RegistrationPage.login(generovanyUzivatel, generovanyEmail, password, password_confirm);
+
+    await expect(await RegistrationPage.getCurrentUser()).toEqual(generovanyUzivatel);
+
+    });
+    
+        
+    
+    /*
+    it('should verify valid admin account', async () => {
+       
+
+    });
+
    
     it('should verify valid reg form2', async () => {
-        let nahodneCislo = Math.random()
+        let nahodneCislo = Math.round(Math.random() * 100)
+
+        await getNameField().setValue('Vendy77')
+        await getEmailField().setValue(nahodneCislo + '@seznam.cz');
+        await getPasswordField().setValue('Passw1');
+        await getPasswordConfirmField().setValue('Passw1');
+        await getLoginButton().click();
+
+        await expect(await getUserNameDropdown().getText()).toEqual('Vendy77');
+    
+
         
-        const NameSelector = await $('#name');
+        
+        /*const NameSelector = await $('#name');
         const emailField = await $('#email');
         const passwordField = await $('#password');
         const passwordConfirmField = await $('#password-confirm');
@@ -121,7 +87,7 @@ describe('Login Page', async () => {
         await emailField.setValue(gfh@seznam.cz);
         await passwordField.setValue(pass1);
         await passwordConfirmField.setValue(pass1);
-        await loginButton.click()*/
+        await loginButton.click()
        
         await NameSelector.setValue("Vendy77");
         await emailField.setValue(nahodneCislo + '@seznam.cz');
@@ -138,9 +104,59 @@ describe('Login Page', async () => {
         console.log('User currently logged in: ' + await userNameDropdown.getText());*/
 
 
-    it('invalid registration - numeric password', async () => {
-        let nahodneCislo = Math.random()
+    /*it('invalid registration - mail already exist', async () => {    
 
+        await getNameField().setValue('Vendy77')
+        await getEmailField().setValue('da-app.admin@czechitas.cz');
+        await getPasswordField().setValue('Passw1');
+        await getPasswordConfirmField().setValue('Passw1');
+        await getLoginButton().click();
+
+
+        await expect(await getToast().getText()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+
+        await expect(await getFieldError().getText()).toEqual('Účet s tímto emailem již existuje');
+
+        expect(getEmailField).toBeDisplayed();
+        expect(getPasswordField).toBeDisplayed();
+        expect(getLoginButton).toBeDisplayed();
+
+    });    
+
+    it('invalid registration - numeric password', async () => {
+        let nahodneCislo = Math.round(Math.random() * 100)
+        
+
+        await getNameField().setValue('Vendy77')
+        await getEmailField().setValue(nahodneCislo + '@seznam.cz');
+        await getPasswordField().setValue('123');
+        await getPasswordConfirmField().setValue('123');
+        await getLoginButton().click();
+
+        await expect(await getToast().getText()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+
+        
+        await expect(await getFieldError().getText()).toEqual('Heslo musí obsahovat minimálně 6 znaků, velké i malé písmeno a číslici');
+        
+        
+        /*await emailField.setValue(username);
+        await passwordField.setValue('invalid');
+        await loginButton.click();
+
+        await expect(await getToast().getText()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+
+        await expect(await getFieldError().getText()).toEqual('Tyto přihlašovací údaje neodpovídají žadnému záznamu.');
+
+        await expect(emailField).toBeDisplayed();
+        await expect(passwordField).toBeDisplayed();
+        await expect(loginButton).toBeDisplayed();
+
+
+    });
+
+
+
+        /*
         const NameSelector = await $('#name');
         const emailField = await $('#email');
         const passwordField = await $('#password');
@@ -168,5 +184,9 @@ describe('Login Page', async () => {
         const navBarNavSelector = $('.active');
         console.log(await navBarNavSelector.getHTML);
         console.log(await navBarNavSelector.getText);
-    });
+    });*/
+
+
+
+    
 });

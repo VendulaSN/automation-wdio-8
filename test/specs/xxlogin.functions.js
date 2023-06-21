@@ -34,3 +34,5 @@ export function getUserNameDropdown() {
 export function getLogoutLink() {
     return $('#logout-link');
 }
+
+export default new LoginPage();

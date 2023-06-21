@@ -57,12 +57,13 @@ export const config = {
         lesson_11: ['./test/specs/examples/lesson-11/**/*.e2e.js'],
         org: ['./test/specs/org.e2e.js'],
         fixtures: ['./test/specs/fixtures.js'],
+        
     },
     maxInstances: 10,
     capabilities: [{
         maxInstances: 5,
         browserName: 'chrome',
-        /*automationProtocol: 'devtools',*/
+        automationProtocol: 'devtools',
         acceptInsecureCerts: true,
         'goog:chromeOptions': {
             args: [
@@ -85,8 +86,8 @@ export const config = {
     logLevel: 'silent',
     bail: 0,
     baseUrl: 'https://team8-2022brno.herokuapp.com',
-    waitforTimeout: 10000,
-    connectionRetryTimeout: 120000,
+    waitforTimeout: 1000,
+    connectionRetryTimeout: 12000,
     automationProtocol: 'devtools',
     connectionRetryCount: 3,
     services: [
@@ -110,7 +111,7 @@ export const config = {
 ],
     mochaOpts: {
         ui: 'bdd',
-        timeout: 90000
+        timeout: 9000
     },
 
         onPrepare: (config, capabilities) => {
