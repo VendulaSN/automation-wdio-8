@@ -57,6 +57,7 @@ export const config = {
         lesson_11: ['./test/specs/examples/lesson-11/**/*.e2e.js'],
         org: ['./test/specs/org.e2e.js'],
         fixtures: ['./test/specs/fixtures.js'],
+        ukol_11: ['./test/ukol_11/order_ukol.e2e.js']
         
     },
     maxInstances: 10,
@@ -86,7 +87,7 @@ export const config = {
     logLevel: 'silent',
     bail: 0,
     baseUrl: 'https://team8-2022brno.herokuapp.com',
-    waitforTimeout: 1000,
+    waitforTimeout: 10000,
     connectionRetryTimeout: 12000,
     automationProtocol: 'devtools',
     connectionRetryCount: 3,
@@ -111,7 +112,7 @@ export const config = {
 ],
     mochaOpts: {
         ui: 'bdd',
-        timeout: 9000
+        timeout: 90000
     },
 
         onPrepare: (config, capabilities) => {

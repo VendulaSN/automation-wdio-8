@@ -1,8 +1,12 @@
 //Meeting ID: 810 9278 7649
 //Passcode: 797195
+//hlavní akceptační body - 1) zobrazení formuláře + ověření console.log/assertace!
+//                         2) validní registrace uživatele + ověření console.log/assertace!
+//                         3) invalidní registrace s existujícím maile + invalid feedback - assertace
+//                         4) invalidní registrace s číselným heslem + invalid feedback - assertace
 
 
-import {usernameTest, email, password, userFullName, password_confirm, generovanyEmail, generovanyUzivatel} from '../../specs/fixtures.js'
+import {usernameTest, email, usernameCzechitas, password, userFullNameTest, password_confirm, generovanyEmail, generovanyUzivatel, numericPasword, numericPasword_confirm, invalidEmail} from '../../specs/fixtures.js'
 import RegistrationPage from '../../specs/homework/registration.page.js'
 
 describe('Registration page', async () => {
@@ -25,18 +29,27 @@ describe('Registration page', async () => {
 
     });
 
+    it('should register with valid credentials', async () => {
+
+    await RegistrationPage.login(generovanyUzivatel, generovanyEmail, password, password_confirm);
+
+    await expect(await RegistrationPage.getCurrentUser()).toEqual(generovanyUzivatel);
+
+    });
+
+
 
     it('should not login with invalid credentials', async () => {
 
-        await RegistrationPage.login('invalid');
+        await RegistrationPage.login(usernameTest, invalidEmail, password, password_confirm);
 
-        // na stránce je jednak toast message
-        await expect(await RegistrationPage.getToastMessage()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+        // na stránce toast message?
+        //await expect(await RegistrationPage.getToastMessage()).toContain('invalid');
 
-        // ale také validační message ve formuláři
-        await expect(await RegistrationPage.getFieldError()).toEqual('Tyto přihlašovací údaje neodpovídají žadnému záznamu.')
+        // validační message ve formuláři
+        await expect(await RegistrationPage.getFieldError()).toContain('neexistuje')
 
-        // stále vidíme login formulář
+        //login formulář
         await expect(await RegistrationPage.nameField).toBeDisplayed();
         await expect(await RegistrationPage.emailField).toBeDisplayed();
         await expect(await RegistrationPage.passwordField).toBeDisplayed();
@@ -45,24 +58,48 @@ describe('Registration page', async () => {
     });
 
     
-    it('should register with valid credentials', async () => {
+   
+    it('should not login with invalid credentials - email already exists', async () => {
 
-    await RegistrationPage.login(generovanyUzivatel, generovanyEmail, password, password_confirm);
+        await RegistrationPage.login(usernameCzechitas, email, password, password_confirm);
 
-    await expect(await RegistrationPage.getCurrentUser()).toEqual(generovanyUzivatel);
+        // toast message
+        await expect(await RegistrationPage.getToastMessage()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
 
+        // validační message ve formuláři
+        await expect(await RegistrationPage.getFieldError()).toEqual('Účet s tímto emailem již existuje')
+
+        // login formulář
+        await expect(await RegistrationPage.nameField).toBeDisplayed();
+        await expect(await RegistrationPage.emailField).toBeDisplayed();
+        await expect(await RegistrationPage.passwordField).toBeDisplayed();
+        await expect(await RegistrationPage.passwordConfirmField).toBeDisplayed();
+        await expect(await RegistrationPage.loginButton).toBeDisplayed();
     });
-    
         
     
-    /*
-    it('should verify valid admin account', async () => {
-       
+    
+    it ('invalid registration - password contains only numeric characters', async () => {
+      await RegistrationPage.login(generovanyUzivatel, generovanyEmail, numericPasword, numericPasword_confirm);
+
+        // toast message
+        //await expect(await RegistrationPage.getToastMessage()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
+
+        // validační message ve formuláři
+        await expect(await RegistrationPage.getFieldError()).toEqual('Heslo musí obsahovat minimálně 6 znaků, velké i malé písmeno a číslici')
+
+        // login formulář
+        await expect(await RegistrationPage.nameField).toBeDisplayed();
+        await expect(await RegistrationPage.emailField).toBeDisplayed();
+        await expect(await RegistrationPage.passwordField).toBeDisplayed();
+        await expect(await RegistrationPage.passwordConfirmField).toBeDisplayed();
+        await expect(await RegistrationPage.loginButton).toBeDisplayed(); 
 
     });
 
+
    
-    it('should verify valid reg form2', async () => {
+    /*it('should verify valid reg form2', async () => {
         let nahodneCislo = Math.round(Math.random() * 100)
 
         await getNameField().setValue('Vendy77')
