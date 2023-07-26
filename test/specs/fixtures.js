@@ -11,11 +11,11 @@ export const numericPasword = '123';
 export const numericPasword_confirm = '123';
 export const invalidEmail = 'invalid@se';
 
-let nahodneCislo = Math.round(Math.random() * 10);
-export const generovanyEmail = (`${nahodneCislo + nahodneCislo}@gmail.com`);
+let nahodneCislo = Math.round(Math.random() * 100);
+export const generovanyEmail = (nahodneCislo + nahodneCislo + '@mailmail.com');
 
 let Uzivatel = Math.round(Math.random() * 10)
-export const generovanyUzivatel = (`Karel${Uzivatel}2${Uzivatel}`);
+export const generovanyUzivatel = (`Karell${Uzivatel}2${Uzivatel}`);
 
 //da-app.admin@czechitas.cz
 //Czechitas123

@@ -7,7 +7,7 @@ describe('Czechitas Login Page', async () => {
 
         await browser.reloadSession();
 
-        await browser.url('/prihlaseni');
+        await browser.url('/zaci');
 
         const windowSize = await browser.getWindowSize();
         console.log(windowSize);

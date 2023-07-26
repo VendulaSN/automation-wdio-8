@@ -1,18 +1,18 @@
 //import { password, username } from "../fixtures";
-
 //import { password_confirm } from "../fixtures";
-
 //import { usernameTest } from "../fixtures";
-
 //import { email, userFullNameCzechitas } from "../fixtures.js";
 
-class RegistrationPage {
+import AppUserPage from "./app.users.js";
+
+class RegistrationPage extends AppUserPage {
 
     constructor() {
+        super();
         this.url = '/registrace';
     }
 
-    //metody které vrací něco na stránce
+    //metody které vrací 'něco' na stránce
     get nameField() {return $('#name'); }
     get emailField() { return $('#email'); }
     get passwordField() { return $('#password'); }
@@ -54,8 +54,11 @@ class RegistrationPage {
         return await this.toast.getText();
     }
 
-}
+   
+    }
 
-//export novou instanci třídy login page
+
+
+//export novou instanci třídy 
 export default new RegistrationPage();
 

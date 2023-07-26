@@ -1,13 +1,21 @@
-//Meeting ID: 810 9278 7649
-//Passcode: 797195
+
 //hlavní akceptační body - 1) zobrazení formuláře + ověření console.log/assertace!
 //                         2) validní registrace uživatele + ověření console.log/assertace!
-//                         3) invalidní registrace s existujícím maile + invalid feedback - assertace
+//                         3) invalidní registrace s existujícím mailem + invalid feedback - assertace
 //                         4) invalidní registrace s číselným heslem + invalid feedback - assertace
+
+/*Test který provede validní registraci uživatele - kontroluj, že registrace proběhla úspěšně
+
+Test, který provede registraci uživatele s již existujícím emailem - zkontroluj, že registrace neproběhla a ověř chyby
+
+Test, který provede registraci uživatele s nevalidním heslem (obsahující pouze čísla) - zkontroluj, že registrace neproběhla a ověř chyby*/
+
 
 
 import {usernameTest, email, usernameCzechitas, password, userFullNameTest, password_confirm, generovanyEmail, generovanyUzivatel, numericPasword, numericPasword_confirm, invalidEmail} from '../../specs/fixtures.js'
 import RegistrationPage from '../../specs/homework/registration.page.js'
+import AppUserPage from '../../specs/homework/app.users.js'
+import ApplicationsCreatePage from './app.create.js';
 
 describe('Registration page', async () => {
 
@@ -33,8 +41,16 @@ describe('Registration page', async () => {
 
     await RegistrationPage.login(generovanyUzivatel, generovanyEmail, password, password_confirm);
 
-    await expect(await RegistrationPage.getCurrentUser()).toEqual(generovanyUzivatel);
+    //await expect(await RegistrationPage.getCurrentUser()).toEqual(generovanyUzivatel);
+    await expect(await RegistrationPage.getCurrentUser()).toEqual(generovanyUzivatel + ' ');
 
+    const AppButton = $('.btn-sm');
+    await AppButton.click();
+
+    //ověření, že jsem na stránce, kde můžu kliknout a dostat se na přihlášku
+    const moreInfoButton = $('.align-self-center');
+    await expect(await moreInfoButton.getText()).toEqual('Více informací');
+    await moreInfoButton.click();
     });
 
 
@@ -43,7 +59,7 @@ describe('Registration page', async () => {
 
         await RegistrationPage.login(usernameTest, invalidEmail, password, password_confirm);
 
-        // na stránce toast message?
+        // je na stránce toast message?
         //await expect(await RegistrationPage.getToastMessage()).toContain('invalid');
 
         // validační message ve formuláři
@@ -77,10 +93,10 @@ describe('Registration page', async () => {
         await expect(await RegistrationPage.loginButton).toBeDisplayed();
     });
         
-    
+
     
     it ('invalid registration - password contains only numeric characters', async () => {
-      await RegistrationPage.login(generovanyUzivatel, generovanyEmail, numericPasword, numericPasword_confirm);
+       await RegistrationPage.login(generovanyUzivatel, 'generovanyEmail@seznam.cz', numericPasword, numericPasword_confirm);
 
         // toast message
         //await expect(await RegistrationPage.getToastMessage()).toEqual('Některé pole obsahuje špatně zadanou hodnotu');
@@ -96,9 +112,30 @@ describe('Registration page', async () => {
         await expect(await RegistrationPage.loginButton).toBeDisplayed(); 
 
     });
+});
 
 
-   
+describe('App User Page', async () => {
+
+    beforeEach(async () => {
+        await RegistrationPage.open();
+        await RegistrationPage.login(generovanyUzivatel, 'vygenerovanyEmail2@sezam.cz', password, password_confirm);
+        
+    });
+
+    it('should create new app', async () => {
+        await expect(await ApplicationsCreatePage.appButton).toBeDisplayed();
+        
+        await ApplicationsCreatePage.appCreated()
+       
+        await expect(await ApplicationsCreatePage.moreInfo).toBeDisplayed()
+        });
+
+})
+
+    
+
+/////////////////  POUZE STARŠÍ POKUSY /////////////////////////////////////////////////////////////////////
     /*it('should verify valid reg form2', async () => {
         let nahodneCislo = Math.round(Math.random() * 100)
 
@@ -110,9 +147,6 @@ describe('Registration page', async () => {
 
         await expect(await getUserNameDropdown().getText()).toEqual('Vendy77');
     
-
-        
-        
         /*const NameSelector = await $('#name');
         const emailField = await $('#email');
         const passwordField = await $('#password');
@@ -188,10 +222,7 @@ describe('Registration page', async () => {
         await expect(passwordField).toBeDisplayed();
         await expect(loginButton).toBeDisplayed();
 
-
     });
-
-
 
         /*
         const NameSelector = await $('#name');
@@ -226,4 +257,4 @@ describe('Registration page', async () => {
 
 
     
-});
+

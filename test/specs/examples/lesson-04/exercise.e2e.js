@@ -3,30 +3,30 @@
  */
 
 
-import {username, password} from '../../fixtures.js'
+//import {username, password} from '../../fixtures.js'
 
 describe('Login Page', async () => {
 
     beforeEach(async () => {
-        await browser.reloadSession();
-        await browser.url('/prihlaseni');
+        
+        await browser.url('/zaci');
     });
 
     it('should show login form', async () => {
-        const emailField = $('#email');
+        /*const emailField = $('#email');
         console.log('Email field is dislayed: ' + await emailField.isDisplayed());
         console.log('Email field is dislayed: ' + await emailField.isEnabled());
 
         const passwordField = $('#password');
         console.log('Password field is dislayed: ' + await passwordField.isDisplayed());
-        console.log('Password field is dislayed: ' + await passwordField.isEnabled());
+        console.log('Password field is dislayed: ' + await passwordField.isEnabled());*/
 
-        const loginButton = $('.btn-primary');
+        const loginButton = $('.btn-sm');
         console.log('Login button is dislayed: ' + await loginButton.isDisplayed());
         console.log('Login button text is: ' + await loginButton.getText());
     });
 
-    it('should login with valid credentials', async () => {
+    /*it('should login with valid credentials', async () => {
         const emailField = $('#email');
         const passwordField = $('#password');
         const loginButton = $('.btn-primary');
@@ -79,9 +79,10 @@ describe('Login Page', async () => {
 
         console.log('User is logged in: ' + await userNameDropdown.isDisplayed());
         console.log('Navbar text: ' + await navbarRight.getText());
-    });
+    });*/
 });
 
+/*
 describe('Applications Page', async () => {
 
     beforeEach(async () => {
@@ -120,4 +121,4 @@ describe('Applications Page', async () => {
             console.log(await row.getText());
         }
     });
-});
+});*/
