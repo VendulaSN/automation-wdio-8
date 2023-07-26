@@ -35,6 +35,7 @@ export const configfirefox = {
 
 
 export const config = {
+    // automationProtocol: 'devtools',
     runner: 'local',
     specs: [
         './test/specs/*.e2e.js'
@@ -69,7 +70,11 @@ export const config = {
         'goog:chromeOptions': {
             args: [
                 '--window-size=1920,1080',
+<<<<<<< HEAD
                 //'--headless',
+=======
+                // '--headless',
+>>>>>>> 74a9de0c039d5272f4b23ff3095bbe9e6e3d7d2a
                 '--no-sandbox',
                 '--disable-gpu',
                 '--disable-setuid-sandbox',
